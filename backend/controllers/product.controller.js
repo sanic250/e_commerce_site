@@ -2,8 +2,13 @@ import mongoose from "mongoose";
 import Product from "../models/product.model.js";
 
 export const getProducts = async (req, res) => {
-  const products = await Product.find({});
-  res.send(products);
+  try {
+    const products = await Product.find({});
+    res.send(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Error retrieving products' });
+  }
 };
 
 export const createProduct = async (req, res) => {
