@@ -1,0 +1,30 @@
+.container{
+  width: 100vw;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  }
+
+  .nav{
+    background-color: black;
+    padding: 2rem 4rem;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo{
+    width: 10rem;
+  }
+
+  .navLinks{
+    display: flex;
+    gap:1.5rem;
+    list-style: none;
+    font-size: 1.3rem;
+    color: white;
+  }
+
+  .link{
+    color: white;
+  }
