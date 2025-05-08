@@ -29,7 +29,15 @@ export const login = async (req, res) => {
   const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
     expiresIn: "1d",
   });
-  res.send(token);
+  res.json({
+    token,
+    user: {
+      _id: user._id,
+      email: user.email,
+      name: user.name,
+      role: user.role, // Kluczowe - przekaż rolę z bazy danych
+    },
+  });
 };
 export const logout = async (req, res) => {
   const token = req.header("Authorization");
@@ -46,5 +54,3 @@ export const logout = async (req, res) => {
     return res.status(401).send("Invalid token");
   }
 };
-
-

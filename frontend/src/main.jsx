@@ -5,6 +5,8 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import Home from "./Home.jsx";
 import Navbar from "./components/Navbar.jsx";
+import Register from "./components/Register.jsx";
+import Login from "./components/Login.jsx";
 
 const RootLayout = () => (
   <>
@@ -18,12 +20,14 @@ const RootLayout = () => (
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-    <Routes>
-      {/* Trasy z layoutem (z Navbarem) */}
-      <Route element={<RootLayout />}>
-        <Route path="/" element={<Home />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+      <Routes>
+        {/* Trasy z layoutem (z Navbarem) */}
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   </StrictMode>
 );

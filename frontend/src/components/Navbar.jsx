@@ -1,11 +1,26 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./styles/navbar.module.css";
+import { Link } from "react-router-dom";
+import useAuthStore from "../services/authStore.js";
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState();
-
-  const handleMenu = () => {
-    setToggleMenu(!toggleMenu);
+  const [toggleProfile, setToggleProfile] = useState(false);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+  const clearPersistedData = useAuthStore((state) => state.clearPersistedData);
+  const isAdmin = useAuthStore((state) => state.isAdmin);
+  useEffect(() => {
+    console.log("Current auth state:", useAuthStore.getState());
+  }, [isLoggedIn]);
+  const handleProfile = () => {
+    setToggleProfile(!toggleProfile);
+  };
+  const handleLogout = () => {
+    logout(); // Wywołaj funkcję logout ze store
+    navigate("/"); // Przekieruj na stronę główną
+    setToggleProfile(false); // Zamknij menu profilowe
   };
 
   return (
@@ -49,12 +64,70 @@ const Navbar = () => {
         </button>
       </div>
       <div className={styles.btnRegister}>
-        <button className={`${styles.buttons} ${styles.button2}`}>
-          Register
-        </button>
-        <button className={`${styles.buttons} ${styles.button3}`}>Login</button>
+        {!isLoggedIn ? (
+          <button className={`${styles.buttons} ${styles.button2}`}>
+            <Link className={styles.link} to="/Register">
+              Register
+            </Link>
+          </button>
+        ) : (
+          ""
+        )}
+
+        {!isLoggedIn ? (
+          <button className={`${styles.buttons} ${styles.button3}`}>
+            <Link className={styles.link} to="/Login">
+              Login
+            </Link>
+          </button>
+        ) : (
+          <div>
+            <img
+              src="/roshi.jpg"
+              alt="avatar"
+              className={styles.avatar}
+              onMouseEnter={() => setToggleProfile(true)}
+              onMouseLeave={() => setToggleProfile(false)}
+            />
+          </div>
+        )}
+
+        {toggleProfile && (
+          <div
+            className={styles.profileMenu}
+            onMouseEnter={() => setToggleProfile(true)}
+            onMouseLeave={() => setToggleProfile(false)}
+          >
+            <ul className={styles.profileList}>
+              <li>
+                <Link className={styles.link} to="/Profile">
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Link className={styles.link} to="/Orders">
+                  Orders
+                </Link>
+              </li>
+              <li>
+                <Link className={styles.link} to="/Settings">
+                  Settings
+                </Link>
+              </li>
+
+              {isAdmin() && (<li>
+                <Link className={styles.link} to="/Dashboard">
+                  Dashboard
+                </Link>
+              </li>)}
+
+              <li className={styles.link} onClick={handleLogout}>
+                Logout
+              </li>
+            </ul>
+          </div>
+        )}
         <button className={`${styles.buttons} ${styles.button4}`}>
-          
           <i class="fa-solid fa-cart-shopping"></i>
         </button>
       </div>
